@@ -36,7 +36,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.lineEdit_1.installEventFilter(self.click_filter_1)
         self.lineEdit_2.installEventFilter(self.click_filter_2)
-    
+
+        self.lineEdit_1.textChanged.connect(self.check_fields)
+        self.lineEdit_2.textChanged.connect(self.check_fields)
+
     def open_emoji_list(self, output_emoji, emoji_list):
         dialog = QDialog(self)
         ui_dialog = Ui_Dialog()
@@ -53,6 +56,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         ui_dialog.listWidget_emoji_list.itemClicked.connect(on_item_clicked)
 
         dialog.exec()
+
+    def check_fields(self):
+        text_1 = self.lineEdit_1.text()
+        text_2 = self.lineEdit_2.text()
+
+        if text_1 != "" and text_2 != "":
+            self.label_picture.setText("k")
+        else:
+            self.label_picture.setText("")
 
 def main():
     app = QApplication(sys.argv)
