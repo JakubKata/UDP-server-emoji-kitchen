@@ -4,9 +4,8 @@ from PySide6.QtCore import QObject, QEvent, Qt
 
 from ui_EmojiKitchen import Ui_MainWindow
 from ui_EmojiList import Ui_Dialog
+from network import Network
 
-test_pool_1 = ["😀", "😂", "😍", "🤔", "😎", "😭", "🎉", "👍", "👎", "🎉","😀", "😂", "🥰", "😎", "🤔", "😭", "😡"]
-test_pool_2 = ["😀", "😂", "😍", "🤔", "😎", "😭", "😡", "👍", "👎", "😡","🍕", "🚗", "🔥", "✨", "❤️", "🍔", "⚽"]
 
 class ClickFilter(QObject):
     def __init__(self, destination_func, emoji_list, parent=None):
@@ -23,22 +22,23 @@ class ClickFilter(QObject):
     
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, network = None):
         super().__init__()
 
+        self.network = network or Network()
         self.setupUi(self)
 
         self.lineEdit_1.setCursor(Qt.PointingHandCursor)
         self.lineEdit_2.setCursor(Qt.PointingHandCursor)
 
-        self.click_filter_1 = ClickFilter(self.open_emoji_list, test_pool_1, self)
-        self.click_filter_2 = ClickFilter(self.open_emoji_list, test_pool_2, self)
+        self.click_filter_1 = ClickFilter(self.open_emoji_list, self.network.get_pull_1(), self)
+        self.click_filter_2 = ClickFilter(self.open_emoji_list, self.network.get_pull_2(), self)
 
         self.lineEdit_1.installEventFilter(self.click_filter_1)
         self.lineEdit_2.installEventFilter(self.click_filter_2)
 
-        self.lineEdit_1.textChanged.connect(self.check_fields)
-        self.lineEdit_2.textChanged.connect(self.check_fields)
+        self.lineEdit_1.textChanged.connect(lambda: self.emoji_changed(1))
+        self.lineEdit_2.textChanged.connect(lambda: self.emoji_changed(2))
 
     def open_emoji_list(self, output_emoji, emoji_list):
         dialog = QDialog(self)
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         dialog.exec()
 
-    def check_fields(self):
+    def emoji_changed(self, line_number):
         text_1 = self.lineEdit_1.text()
         text_2 = self.lineEdit_2.text()
 
