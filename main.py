@@ -61,10 +61,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         text_1 = self.lineEdit_1.text()
         text_2 = self.lineEdit_2.text()
 
-        if text_1 != "" and text_2 != "":
-            self.label_picture.setText("k")
-        else:
-            self.label_picture.setText("")
+        result = self.network.get_result(text_1, text_2, line_number)
+        self.label_picture.setText(result)
 
 def main():
     app = QApplication(sys.argv)
