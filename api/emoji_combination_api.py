@@ -2,7 +2,7 @@ import requests
 from requests.exceptions import RequestException
 from google.protobuf.json_format import MessageToDict
 
-import schema_pb2
+import proto.schema_pb2 as schema_pb2
 
 PARAMETER_URL = "https://www.google.com/logos/fnbx/emoji_kitchen/emoji_kitchen_pairs.11.pb"
 

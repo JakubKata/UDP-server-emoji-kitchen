@@ -3,9 +3,9 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QDialog, QListWidgetIte
 from PySide6.QtCore import QObject, QEvent, Qt
 from PySide6.QtGui import QPixmap
 
-from ui_EmojiKitchen import Ui_MainWindow
-from ui_EmojiList import Ui_Dialog
-from network import Network
+from ui.ui_EmojiKitchen import Ui_MainWindow
+from ui.ui_EmojiList import Ui_Dialog
+from api.network import Network
 
 
 class ClickFilter(QObject):
