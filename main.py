@@ -16,7 +16,7 @@ class ClickFilter(QObject):
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
-            self.destination_func(obj, self.emoji_list)
+            self.destination_func(obj, self.emoji_list())
             return True
         return super().eventFilter(obj, event)
             
@@ -31,8 +31,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lineEdit_1.setCursor(Qt.PointingHandCursor)
         self.lineEdit_2.setCursor(Qt.PointingHandCursor)
 
-        self.click_filter_1 = ClickFilter(self.open_emoji_list, self.network.get_pool_1(), self)
-        self.click_filter_2 = ClickFilter(self.open_emoji_list, self.network.get_pool_2(), self)
+        self.click_filter_1 = ClickFilter(self.open_emoji_list, lambda: self.network.get_pool_1(), self)
+        self.click_filter_2 = ClickFilter(self.open_emoji_list, lambda: self.network.get_pool_2(), self)
 
         self.lineEdit_1.installEventFilter(self.click_filter_1)
         self.lineEdit_2.installEventFilter(self.click_filter_2)
@@ -61,7 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         text_1 = self.lineEdit_1.text()
         text_2 = self.lineEdit_2.text()
         
-        result = self.network.get_result(text_1, text_2, line_number)
+        result = self.network.emoji_change(text_1, text_2, line_number)
 
         pixmap = QPixmap()
         pixmap.loadFromData(result)
