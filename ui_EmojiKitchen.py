@@ -102,4 +102,3 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"+", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"=", None))
     # retranslateUi
-

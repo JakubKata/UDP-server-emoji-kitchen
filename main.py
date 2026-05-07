@@ -1,6 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QDialog, QListWidgetItem
 from PySide6.QtCore import QObject, QEvent, Qt
+from PySide6.QtGui import QPixmap
 
 from ui_EmojiKitchen import Ui_MainWindow
 from ui_EmojiList import Ui_Dialog
@@ -15,12 +16,11 @@ class ClickFilter(QObject):
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
-             self.destination_func(obj, self.emoji_list)
-             return True
+            self.destination_func(obj, self.emoji_list)
+            return True
         return super().eventFilter(obj, event)
             
     
-
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, network = None):
         super().__init__()
@@ -31,8 +31,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lineEdit_1.setCursor(Qt.PointingHandCursor)
         self.lineEdit_2.setCursor(Qt.PointingHandCursor)
 
-        self.click_filter_1 = ClickFilter(self.open_emoji_list, self.network.get_pull_1(), self)
-        self.click_filter_2 = ClickFilter(self.open_emoji_list, self.network.get_pull_2(), self)
+        self.click_filter_1 = ClickFilter(self.open_emoji_list, self.network.get_pool_1(), self)
+        self.click_filter_2 = ClickFilter(self.open_emoji_list, self.network.get_pool_2(), self)
 
         self.lineEdit_1.installEventFilter(self.click_filter_1)
         self.lineEdit_2.installEventFilter(self.click_filter_2)
@@ -60,9 +60,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def emoji_changed(self, line_number):
         text_1 = self.lineEdit_1.text()
         text_2 = self.lineEdit_2.text()
-
+        
         result = self.network.get_result(text_1, text_2, line_number)
-        self.label_picture.setText(result)
+
+        pixmap = QPixmap()
+        pixmap.loadFromData(result)
+        self.label_picture.setScaledContents(True)
+        self.label_picture.setPixmap(pixmap)
 
 def main():
     app = QApplication(sys.argv)
