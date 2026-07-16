@@ -61,7 +61,13 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Update the `API_KEY` value in `.env` before running the app.
+Update the `API_KEY` value in `.env` before running the app. The app loads this value at startup through `python-dotenv`.
+
+Example `.env` contents:
+
+```env
+API_KEY=your_tenor_api_key_here
+```
 
 ---
 
